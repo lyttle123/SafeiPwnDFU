@@ -374,7 +374,7 @@ if __name__ == '__main__':
                 print 'ERROR: Demotion is only supported on devices pwned with checkm8 exploit.'
                 sys.exit(1)
 
-            
+        
         if opt == '--boot':
             device = dfu.acquire_device()
             serial_number = device.serial_number
