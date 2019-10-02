@@ -350,31 +350,6 @@ if __name__ == '__main__':
         if opt == '--demote':
             print 'What the hell are you playing at? Assuming you are an average user, you do not need to use this. If you know **EXACTLY** what you are doing, run "--fuckingdemotemydevicedaddyuwu" (No quotes).'
 
-        if opt == '--fuckingdemotemydevicedaddyuwu':
-            device = dfu.acquire_device()
-            serial_number = device.serial_number
-            dfu.release_device(device)
-
-            if 'PWND:[checkm8]' in serial_number:
-                pwned = usbexec.PwnedUSBDevice()
-                old_value = pwned.read_memory_uint32(pwned.platform.demotion_reg)
-                print 'Demotion register: 0x%x' % old_value
-                if old_value & 1:
-                    print 'Attempting to demote device.'
-                    pwned.write_memory_uint32(pwned.platform.demotion_reg, old_value & 0xFFFFFFFE)
-                    new_value = pwned.read_memory_uint32(pwned.platform.demotion_reg)
-                    print 'Demotion register: 0x%x' % new_value
-                    if old_value != new_value:
-                        print 'Success!'
-                    else:
-                        print 'Failed.'
-                else:
-                    print 'WARNING: Device is already demoted.'
-            else:
-                print 'ERROR: Demotion is only supported on devices pwned with checkm8 exploit.'
-                sys.exit(1)
-
-        
         if opt == '--boot':
             device = dfu.acquire_device()
             serial_number = device.serial_number
