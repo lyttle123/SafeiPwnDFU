@@ -15,6 +15,10 @@ def print_help():
     print '  -x\t\t\t\tinstall alloc8 exploit to NOR'
     print '  -f file\t\t\tsend file to device in DFU Mode'
     print 'Advanced options:'
+    
+    print '>>> THIS VERSION OF iPwnDFU DOES NOT INCLUDE --de OR --demote <<<
+    print '>>> DO NOT BOTHER TRYING TO USE IT <<<
+    
     print '  --boot\t\t\tboot device'
     print '  --dump=address,length\t\tdump memory to stdout'
     print '  --hexdump=address,length\thexdump memory to stdout'
