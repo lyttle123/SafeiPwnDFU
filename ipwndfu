@@ -15,7 +15,6 @@ def print_help():
     print '  -x\t\t\t\tinstall alloc8 exploit to NOR'
     print '  -f file\t\t\tsend file to device in DFU Mode'
     print 'Advanced options:'
-    print '  --demote\t\t\tdemote device to enable JTAG'
     print '  --boot\t\t\tboot device'
     print '  --dump=address,length\t\tdump memory to stdout'
     print '  --hexdump=address,length\thexdump memory to stdout'
@@ -32,7 +31,7 @@ def print_help():
 
 if __name__ == '__main__':
     try:
-        advanced = ['demote', 'boot', 'dump=', 'hexdump=', 'dump-rom', 'dump-nor=', 'flash-nor=', '24kpwn', 'remove-24kpwn', 'remove-alloc8', 'decrypt-gid=', 'encrypt-gid=', 'decrypt-uid=', 'encrypt-uid=']
+        advanced = ['boot', 'dump=', 'hexdump=', 'dump-rom', 'dump-nor=', 'flash-nor=', '24kpwn', 'remove-24kpwn', 'remove-alloc8', 'decrypt-gid=', 'encrypt-gid=', 'decrypt-uid=', 'encrypt-uid=']
         opts, args = getopt.getopt(sys.argv[1:], 'pxf:', advanced)
     except getopt.GetoptError:
         print 'ERROR: Invalid arguments provided.'
@@ -123,30 +122,6 @@ if __name__ == '__main__':
             dfu.send_data(device, data)
             dfu.request_image_validation(device)
             dfu.release_device(device)
-
-        if opt == '--demote':
-            device = dfu.acquire_device()
-            serial_number = device.serial_number
-            dfu.release_device(device)
-
-            if 'PWND:[checkm8]' in serial_number:
-                pwned = usbexec.PwnedUSBDevice()
-                old_value = pwned.read_memory_uint32(pwned.platform.demotion_reg)
-                print 'Demotion register: 0x%x' % old_value
-                if old_value & 1:
-                    print 'Attempting to demote device.'
-                    pwned.write_memory_uint32(pwned.platform.demotion_reg, old_value & 0xFFFFFFFE)
-                    new_value = pwned.read_memory_uint32(pwned.platform.demotion_reg)
-                    print 'Demotion register: 0x%x' % new_value
-                    if old_value != new_value:
-                        print 'Success!'
-                    else:
-                        print 'Failed.'
-                else:
-                    print 'WARNING: Device is already demoted.'
-            else:
-                print 'ERROR: Demotion is only supported on devices pwned with checkm8 exploit.'
-                sys.exit(1)
 
         if opt == '--dump':
             if arg.count(',') != 1:
